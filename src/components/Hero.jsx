@@ -14,13 +14,24 @@ const greetings = [
     { text: 'Ciao!', lang: 'Italian' },
 ]
 
+const playlist = [
+    { title: 'Perfect', artist: 'Ed Sheeran', cover: songCover, src: songFile },
+    // Placeholders for future songs as requested
+    { title: 'Coming Soon', artist: 'Unknown', cover: songCover, src: '' },
+    { title: 'Coming Soon', artist: 'Unknown', cover: songCover, src: '' },
+    { title: 'Coming Soon', artist: 'Unknown', cover: songCover, src: '' },
+]
+
 function Hero() {
     const [greetingIdx, setGreetingIdx] = useState(0)
     const [greetingVisible, setGreetingVisible] = useState(true)
     const [time, setTime] = useState('')
     const [isOnline, setIsOnline] = useState(true)
+
+    const [trackIdx, setTrackIdx] = useState(0)
     const [isPlaying, setIsPlaying] = useState(false)
     const [isMuted, setIsMuted] = useState(false)
+    const [progress, setProgress] = useState(0)
     const audioRef = useRef(null)
 
     // Greeting cycle
@@ -52,11 +63,11 @@ function Hero() {
     }, [])
 
     const togglePlay = () => {
-        if (!audioRef.current) return
+        if (!audioRef.current || !playlist[trackIdx].src) return
         if (isPlaying) {
             audioRef.current.pause()
         } else {
-            audioRef.current.play()
+            audioRef.current.play().catch(e => console.log("Audio play failed", e))
         }
         setIsPlaying(!isPlaying)
     }
@@ -67,9 +78,50 @@ function Hero() {
         setIsMuted(!isMuted)
     }
 
+    const nextTrack = () => {
+        setTrackIdx((prev) => (prev + 1) % playlist.length)
+    }
+
+    const prevTrack = () => {
+        setTrackIdx((prev) => (prev - 1 + playlist.length) % playlist.length)
+    }
+
+    useEffect(() => {
+        if (isPlaying && audioRef.current && playlist[trackIdx].src) {
+            audioRef.current.play().catch(e => {
+                console.log("Audio play failed:", e)
+                setIsPlaying(false)
+            })
+        } else if (!playlist[trackIdx].src && isPlaying) {
+            setIsPlaying(false)
+        }
+    }, [trackIdx])
+
+    const handleTimeUpdate = () => {
+        if (audioRef.current && audioRef.current.duration) {
+            setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100)
+        }
+    }
+
+    const handleSeek = (e) => {
+        if (!audioRef.current || !audioRef.current.duration || !playlist[trackIdx].src) return
+        const rect = e.currentTarget.getBoundingClientRect()
+        const clickX = e.clientX - rect.left
+        const p = clickX / rect.width
+        audioRef.current.currentTime = p * audioRef.current.duration
+        setProgress(p * 100)
+    }
+
+    const currentTrack = playlist[trackIdx]
+
     return (
         <section id="hero">
-            <audio ref={audioRef} src={songFile} loop onEnded={() => setIsPlaying(false)} />
+            <audio
+                ref={audioRef}
+                src={currentTrack.src}
+                onEnded={nextTrack}
+                onTimeUpdate={handleTimeUpdate}
+            />
 
             {/* Main intro card */}
             <div className="glass hero-main" style={{ gridColumn: 1, gridRow: '1 / 3' }}>
@@ -156,12 +208,20 @@ function Hero() {
                         Currently vibing to
                     </div>
                     <div className="spotify-track">
-                        <div className="album-art"><img src={songCover} alt="Perfect - Ed Sheeran" className="album-art-img" /></div>
+                        <div className="album-art" style={{ animationPlayState: isPlaying ? 'running' : 'paused' }}>
+                            <img src={currentTrack.cover} alt={currentTrack.title} className="album-art-img" />
+                        </div>
                         <div className="track-info">
-                            <div className="track-name">Perfect</div>
-                            <div className="track-artist">Ed Sheeran</div>
+                            <div className="track-name">{currentTrack.title}</div>
+                            <div className="track-artist">{currentTrack.artist}</div>
                         </div>
                         <div className="player-controls">
+                            <button className="player-btn" onClick={prevTrack} aria-label="Previous">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="19,20 9,12 19,4" />
+                                    <rect x="5" y="4" width="2" height="16" />
+                                </svg>
+                            </button>
                             <button className="player-btn" onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
                                 {isPlaying ? (
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -174,15 +234,21 @@ function Hero() {
                                     </svg>
                                 )}
                             </button>
-                            <button className="player-btn" onClick={toggleMute} aria-label={isMuted ? 'Unmute' : 'Mute'}>
+                            <button className="player-btn" onClick={nextTrack} aria-label="Next">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5,4 15,12 5,20" />
+                                    <rect x="17" y="4" width="2" height="16" />
+                                </svg>
+                            </button>
+                            <button className="player-btn" onClick={toggleMute} aria-label={isMuted ? 'Unmute' : 'Mute'} style={{ marginLeft: '4px' }}>
                                 {isMuted ? (
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill="currentColor" />
                                         <line x1="23" y1="9" x2="17" y2="15" />
                                         <line x1="17" y1="9" x2="23" y2="15" />
                                     </svg>
                                 ) : (
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill="currentColor" />
                                         <path d="M15.54 8.46a5 5 0 010 7.07" />
                                         <path d="M19.07 4.93a10 10 0 010 14.14" />
@@ -191,7 +257,9 @@ function Hero() {
                             </button>
                         </div>
                     </div>
-                    <div className="progress-bar"><div className={`progress-fill${isPlaying ? '' : ' paused'}`} /></div>
+                    <div className="progress-bar" onClick={handleSeek}>
+                        <div className="progress-fill" style={{ width: `${progress}%` }} />
+                    </div>
                 </div>
             </div>
         </section>

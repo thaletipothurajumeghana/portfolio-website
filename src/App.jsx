@@ -5,7 +5,6 @@ import About from './components/About'
 import TechStack from './components/TechStack'
 import Projects from './components/Projects'
 import Contact from './components/Contact'
-import Footer from './components/Footer'
 import { useEffect, useState } from 'react'
 
 function App() {
@@ -35,7 +34,6 @@ function App() {
       <TechStack />
       <Projects />
       <Contact />
-      <Footer />
     </>
   )
 }
