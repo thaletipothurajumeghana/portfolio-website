@@ -624,9 +624,80 @@ body.dark .tech-img-invertible {
 .project-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
   margin-top: auto;
+}
+
+.project-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.project-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.github-btn {
+  background: rgba(242,168,184,0.15);
+  color: var(--deep-rose);
+}
+
+.github-btn:hover {
+  background: rgba(242,168,184,0.3);
+  transform: translateY(-1px);
+}
+
+.gallery-btn {
+  background: rgba(100, 150, 200, 0.15);
+  color: #3a7fbf;
+  border-color: rgba(100, 150, 200, 0.35);
+}
+
+.gallery-btn:hover {
+  background: rgba(100, 150, 200, 0.3);
+  transform: translateY(-1px);
+}
+
+.demo-btn {
+  background: rgba(100, 200, 100, 0.15);
+  color: #2d8f2d;
+  border-color: rgba(100, 200, 100, 0.35);
+}
+
+.demo-btn:hover {
+  background: rgba(100, 200, 100, 0.3);
+  transform: translateY(-1px);
+}
+
+.project-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(150, 150, 150, 0.15) !important;
+  color: var(--text-muted) !important;
+  border-color: rgba(150, 150, 150, 0.35) !important;
+}
+
+.project-btn.disabled:hover {
+  background: rgba(150, 150, 150, 0.15) !important;
+  transform: none !important;
+  cursor: not-allowed;
 }
 
 .project-repo-btn {

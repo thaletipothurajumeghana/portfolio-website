@@ -4,11 +4,11 @@
   --peach: #FFDDD2;
   --rose: #F2A8B8;
   --blush: #FFB5C8;
-  --cream: #FFF5F0;
+  --cream: #FFFFFF;
   --deep-rose: #C97B8A;
-  --text: #3D2A2F;
-  --text-muted: #8C6570;
-  --glass-bg: rgba(255, 245, 240, 0.45);
+  --text: #000000;
+  --text-muted: #666666;
+  --glass-bg: rgba(255, 255, 255, 0.45);
   --glass-border: rgba(242, 168, 184, 0.35);
   --glass-shadow: 0 8px 32px rgba(201, 123, 138, 0.15);
   --blur: blur(16px);

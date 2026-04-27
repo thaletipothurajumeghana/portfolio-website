@@ -63,7 +63,7 @@ function Contact() {
             <div className="section-label">Let's Connect</div>
             <div className="contact-grid">
 
-                <div className="glass contact-form reveal">
+                <div className="glass contact-form">
                     <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.4rem', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>
                         Send a Message
                     </div>
@@ -89,7 +89,7 @@ function Contact() {
                     </form>
                 </div>
 
-                <div className="glass socials-card reveal">
+                <div className="glass socials-card">
                     <div className="socials-title">Find Me On</div>
                     <div className="socials-subtitle">Always open to connecting with fellow data enthusiasts, researchers, and recruiters. Whether you have a challenging project, need a technical consultation, or just want to chat about the latest in AI, I'd love to hear from you! Drop me a message and let's build something amazing together.</div>
                     <div className="social-links-grid">

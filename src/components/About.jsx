@@ -2,7 +2,7 @@ function About() {
     return (
         <section id="about">
             <div className="section-label">About Me</div>
-            <div className="glass about-card reveal">
+            <div className="glass about-card">
                 <p className="about-text">
                     AI and Data Science undergraduate with hands-on experience in{' '}
                     <em>machine learning</em> and <em>deep learning</em> using Python.

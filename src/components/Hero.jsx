@@ -93,9 +93,10 @@ function Hero() {
                 setIsPlaying(false)
             })
         } else if (!playlist[trackIdx].src && isPlaying) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsPlaying(false)
         }
-    }, [trackIdx])
+    }, [trackIdx, isPlaying])
 
     const handleTimeUpdate = () => {
         if (audioRef.current && audioRef.current.duration) {
